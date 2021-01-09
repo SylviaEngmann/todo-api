@@ -47,6 +47,29 @@ const addTodo = (request, response) => {
     })
 }
 
+const editTodo = (request, response) => {
+    const id = parseInt(request.params.id)
+    const {taskName, taskDescription, dueDate, taskStatus, taskPriority} = request.body
+
+    pool.query('UPDATE todo_list set taskName = $1, taskDescription = $2, dueDate = $3, taskStatus = $4, taskPriority = $5', [taskName, taskDescription, dueDate, taskStatus, taskPriority], (error, results) => {
+        if (error) {
+            throw error
+          }
+          response.status(201).send(`Task Item edited with ID: ${id}`)
+    })
+}
+
+const deleteTodo = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    pool.query('DELETE from todo_list WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(`Task Item deleted with ID: ${id}`)
+    })
+}
+
 module.exports = {
     getTodo,
     getTodoById,

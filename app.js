@@ -19,11 +19,13 @@ app.use(
 )
 
 app.get('/', (request, response) => {
-    response.json({ info: 'Node.js, Express, and Postgres API' })
+    response.json({ info: 'Todo List API' })
   })
 app.get('/todolist', db.getTodo)
 app.get('/todolist/:id', db.getTodoById)
-app.post('todolist', db.addTodo)
+app.post('/todolist', db.addTodo)
+app.put('/todolist/:id', db.editTodo)
+app.delete('/todolist/:id', db.deleteTodo)
 
 
 app.listen(port, () => {
