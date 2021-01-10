@@ -74,4 +74,6 @@ module.exports = {
     getTodo,
     getTodoById,
     addTodo,
+    editTodo,
+    deleteTodo,
 }
