@@ -1,13 +1,4 @@
 const Pool = require('pg').Pool
-/*
-const pool = new Pool({
-  user: 'fialgzgsajjpit',
-  host: 'ec2-54-170-123-247.eu-west-1.compute.amazonaws.com',
-  database: 'd6t1ba3hcih0fh',
-  password: '0c1936283bbef6d61ddfb1177fdb578e2d7f56e1d35cf4053fb8c28b35368662',
-  port: 5432,
-})
-*/
 
 const pool = new Pool({
     user: 'engineer',
@@ -17,17 +8,19 @@ const pool = new Pool({
     port: 5432,
 })
 
+//works
 const getTodo = (request, response) => {
     pool.query('SELECT * FROM todo_list', (error, results) =>{
         if (error) {
             throw error
         }
-        response.status(200).json(results.rows)
+        response.status(200).json(results.rows);
     })
 }
 
+//works
 const getTodoById = (request, response) => {
-    const id = parseInt(request.params.id)
+    const id = parseInt(request.params.id);
 
     pool.query('SELECT * FROM todo_list WHERE id = $1', [id], (error, results) => {
         if (error) {
@@ -38,12 +31,21 @@ const getTodoById = (request, response) => {
 }
 
 const addTodo = (request, response) => {
-    const {taskName, taskDescription, dueDate, taskStatus, taskPriority} = request.body
-    pool.query('INSERT INTO todo_list (taskName, taskDescription, dueDate, taskStatus, taskPriority) VALUES ($1, $2, $3, $4, $5)', [taskName, taskDescription, dueDate, taskStatus, taskPriority], (error, results) => {
+    //console.log(request.body);
+    const taskname = request.body.taskname;
+    const taskdescription = request.body.taskdescription;
+    const duedate = request.body.duedate;
+    const taskstatus = request.body.taskstatus;
+    const taskpriority = request.body.taskpriority;
+
+    pool.query(
+        'INSERT INTO todo_list (taskName, taskDescription, dueDate, taskStatus, taskPriority) VALUES ($1, $2, $3, $4, $5)',
+        [taskname, taskdescription, duedate, taskstatus, taskpriority],
+     (error, results) => {
         if (error) {
             throw error
           }
-          response.status(201).send(`Task Item added with ID: ${results.insertId}`)
+          response.status(201).json({'message' : 'Todo inserted successfully'})
     })
 }
 
@@ -55,10 +57,12 @@ const editTodo = (request, response) => {
         if (error) {
             throw error
           }
-          response.status(201).send(`Task Item edited with ID: ${id}`)
+          //response.status(201).send(`Task Item edited with ID: ${id}`)
+          response.status(201).json({'message' : 'Task Item edited'})
     })
 }
 
+//works
 const deleteTodo = (request, response) => {
     const id = parseInt(request.params.id)
 
@@ -66,7 +70,9 @@ const deleteTodo = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(200).send(`Task Item deleted with ID: ${id}`)
+        //response.status(200).send(`Task Item deleted with ID: ${id}`)
+        response.status(200).json({'message' : 'Task Item deleted'})
+
     })
 }
 
